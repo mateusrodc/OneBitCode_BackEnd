@@ -34,7 +34,7 @@ export const favoritesController = {
   delete: async (req: AuthenticatedRequest, res: Response) => {
     const userId = req.user!.id
     const courseId = req.params.id
-
+    console.log(courseId)
     try {
       await favoriteService.delete(userId, Number(courseId))
       return res.status(204).send()
