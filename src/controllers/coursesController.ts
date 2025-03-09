@@ -11,11 +11,9 @@ export const coursesController = {
     const userId = req.user!.id
     const courseId = req.params.id
 
-    try {
-        console.log('chamada 1',courseId)
-        console.log('chamada 2',userId)
+    try 
+    {
         const course = await courseService.findByIdWithEpisodes(courseId)
-        console.log('chamada 3',course)
 
         if (!course) return res.status(404).json({ message: 'Curso não encontrado' })
 
@@ -71,5 +69,22 @@ export const coursesController = {
 
     }
 
+  },
+
+  popular: async (req: Request, res: Response) => {
+    try 
+    {
+
+      const topTen = await courseService.getTopTenByLikes()
+      return res.json(topTen)
+
+    } 
+    catch (err) 
+    {
+      if (err instanceof Error) 
+      {
+        return res.status(400).json({ message: err.message })
+      }
+    }
   }
 }
