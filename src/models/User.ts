@@ -14,6 +14,7 @@ export interface User {
   email: string
   password: string
   role: 'admin' | 'user'
+  created_at: string
 }
 
 export interface UserCreationAttributes
@@ -62,6 +63,9 @@ export const User = database.define<UserInstance, User>('users', {
   role: {
     allowNull: false,
     type: DataTypes.STRING
+  },
+  created_at:{
+    type: DataTypes.DATE
   }
 },
 {
