@@ -1,3 +1,7 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 import express from 'express'
 import { database } from './database'
 import { adminJs, adminJsRouter } from './adminjs'
