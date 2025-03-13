@@ -21,7 +21,8 @@ const authController = {
         birth,
         email,
         password,
-        role: 'user'
+        role: 'user',
+        created_at: Date.now().toString()
       })
 
       return res.status(201).json(user)
