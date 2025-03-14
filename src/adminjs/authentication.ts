@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { ADMINJS_COOKIE_PASSWORD } from '../config/enviroment'
 
 export const authtenticationOptions: AuthenticationOptions = {
-  authenticate: async (email, password) => {
+  authenticate: async (email: string, password: string) => {
     const user = await User.findOne({ where: { email } })
 
     if (user && user.role === 'admin') {
