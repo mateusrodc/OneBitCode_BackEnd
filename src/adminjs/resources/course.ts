@@ -1,6 +1,6 @@
 import { FeatureType, ResourceOptions } from "adminjs";
 import uploadFileFeature from '@adminjs/upload'
-import path from 'path'
+import {AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BUCKET_NAME  } from '../../config/enviroment'
 
 export const courseResourceOptions: ResourceOptions = {
   navigation: 'Catálogo',
@@ -13,15 +13,20 @@ export const courseResourceOptions: ResourceOptions = {
 export const courseResourceFeatures: FeatureType[] = [
   uploadFileFeature({
     provider: {
-      local: {
-        bucket: path.join(__dirname, '../../../public'),
-        opts: {}
-      }
+      aws: {
+        bucket: BUCKET_NAME,
+        region: AWS_REGION,
+        accessKeyId: AWS_ACCESS_KEY_ID,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY,
+      },
     },
     properties: {
       key: 'thumbnailUrl',
-      file: 'uploadThumbnail'
+      file: 'uploadThumbnail',
     },
-    uploadPath: (record, filename) => `thumbnails/course-${record.get('id')}/${filename}`
-  })
-]
+    uploadPath: (record, filename) => `thumbnails/course-${record.get('id')}/${filename}`,
+    validation: {
+      mimeTypes: ['image/png', 'image/jpeg', 'image/gif'],
+    },
+  }),
+];
