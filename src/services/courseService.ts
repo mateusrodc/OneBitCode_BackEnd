@@ -1,5 +1,7 @@
 import { Op } from "sequelize"
 import { Course } from "../models"
+import { AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BUCKET_NAME } from '../config/enviroment';
+import generateSignedUrl from "./aws";
 
 export const courseService = {
   findByIdWithEpisodes: async (id: string) => {
@@ -18,7 +20,17 @@ export const courseService = {
         order: [['order', 'ASC']],
         separate: true
       }
-    })
+    });
+
+    if (courseWithEpisodes && courseWithEpisodes.thumbnailUrl) {
+      courseWithEpisodes.thumbnailUrl = await generateSignedUrl(
+          BUCKET_NAME,
+          courseWithEpisodes.thumbnailUrl,
+          AWS_REGION,
+          AWS_ACCESS_KEY_ID,
+          AWS_SECRET_ACCESS_KEY
+      );
+  }
 
     return courseWithEpisodes
   },
@@ -30,6 +42,18 @@ export const courseService = {
         featured: true
       }
     })
+
+    for (const element of featuredCourses) {
+      if (element && element.thumbnailUrl) {
+          element.thumbnailUrl = await generateSignedUrl(
+              BUCKET_NAME,
+              element.thumbnailUrl,
+              AWS_REGION,
+              AWS_ACCESS_KEY_ID,
+              AWS_SECRET_ACCESS_KEY
+          );
+      }
+    }
 
     const randomFeaturedCourses = featuredCourses.sort(() => 0.5 - Math.random())
 
