@@ -66,6 +66,18 @@ export const courseService = {
       order: [['created_at', 'DESC']]
     })
 
+    for(const course of courses){
+      if(course && course.thumbnailUrl){
+        course.thumbnailUrl = await generateSignedUrl(
+          BUCKET_NAME,
+          course.thumbnailUrl,
+          AWS_REGION,
+          AWS_ACCESS_KEY_ID,
+          AWS_SECRET_ACCESS_KEY
+        )
+      }
+    }
+
     return courses
   },
 
