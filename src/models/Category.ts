@@ -1,10 +1,12 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import { database } from '../database'
+import { Course  } from './Course'
 
 export interface Category {
   id: number
   name: string
   position: number
+  courses?: Course[];
 }
 
 export interface CategoryCreationAttributes extends Optional<Category, 'id'> {}
