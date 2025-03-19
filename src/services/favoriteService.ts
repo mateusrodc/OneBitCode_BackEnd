@@ -1,4 +1,6 @@
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY, BUCKET_NAME } from "../config/enviroment"
 import { Favorite } from "../models/Favorite"
+import generateSignedUrl from "./aws"
 
 export const favoriteService = {
 	create: async (userId: number, courseId: number) => {
@@ -24,6 +26,25 @@ export const favoriteService = {
         ]
       }
     })
+
+    if(favorites){
+
+      for(const favorite of favorites)
+      {
+
+        if(favorite.Course?.thumbnailUrl){
+
+          favorite.Course.thumbnailUrl = await generateSignedUrl(
+            BUCKET_NAME,
+            favorite.Course.thumbnailUrl,
+            AWS_REGION,
+            AWS_ACCESS_KEY_ID,
+            AWS_SECRET_ACCESS_KEY
+          )
+
+        }
+      }
+    }
 
     return {
       userId,
